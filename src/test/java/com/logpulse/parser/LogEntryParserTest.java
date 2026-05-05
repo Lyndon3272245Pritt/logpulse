@@ -41,6 +41,18 @@ class LogEntryParserTest {
     }
 
     @Test
+    void parsesTimestampCorrectly() {
+        String line = "2024-01-15T10:23:45.123Z [auth-service] [INFO] User login successful";
+        Optional<LogEntry> result = parser.parse(line);
+
+        assertTrue(result.isPresent());
+        assertNotNull(result.get().getTimestamp());
+        assertEquals(2024, result.get().getTimestamp().getYear());
+        assertEquals(1, result.get().getTimestamp().getMonthValue());
+        assertEquals(15, result.get().getTimestamp().getDayOfMonth());
+    }
+
+    @Test
     void returnsEmptyForMalformedLine() {
         Optional<LogEntry> result = parser.parse("this is not a valid log line");
         assertTrue(result.isEmpty());
